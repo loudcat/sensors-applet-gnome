@@ -31,7 +31,7 @@ char *con(const char *s1, char *s2){
     return res;
 }
 
-void find_dir_recurce(const char *path){
+void find_dir(const char *path){
     DIR *dir;
     struct dirent *ent;
     if ((dir = opendir(path)) != NULL){
@@ -45,7 +45,7 @@ void find_dir_recurce(const char *path){
             if (ent->d_type == 10 & (match(ent->d_name, "^hwmon.$") != 0)){
                 //const char *new_p = con(path, ent->d_name);
                 printf("%s\n", ent->d_name);
-                find_dir_recurce(con(path, ent->d_name));
+                find_dir(con(path, ent->d_name));
             }
 
         }
