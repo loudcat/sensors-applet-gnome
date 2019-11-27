@@ -5,6 +5,6 @@
 int main(void)
 {
     printf("Hello\n");
-    find_dir_recurce("/sys/class/hwmon");
+    find_dir("/sys/class/hwmon");
     return 0;
 }
