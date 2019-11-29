@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include <regex.h>
+#include <unistd.h>
 
 typedef struct node
 {
@@ -87,8 +88,33 @@ int main(void)
     printf("Hello\n");
     node_t *head = find_dir("/sys/class/hwmon");
 
-    for (int i = 0; i<=10; i++){
-        print_list(head);
+    while (1){
+        node_t * current = head;
+
+        while (current != NULL) {
+            char name_from_file[30];
+            int temp_from_file;
+            FILE *name, *temp;
+            if((name = fopen(con(current->path, "name"), "r")) != NULL){
+                fscanf(name, "%s", name_from_file);
+                fclose(name);
+            }
+            else {
+                return 1;
+            }
+            if((temp = fopen(con(current->path, "temp1_input"), "r")) != NULL){
+                fscanf(temp, "%d", &temp_from_file);
+                fclose(temp);
+            }
+            else {
+                printf("error read form file (%s)\n", con(current->path, "/temp1_input"));
+                temp_from_file = 0;
+            }
+            printf("%s: %d\n", name_from_file ,temp_from_file);
+            //printf("Value: %s\n", current->path);
+            current = current->next;
+        }
+        sleep(3);
     }
     return 0;
 }
